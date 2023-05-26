@@ -7,15 +7,19 @@ import validators from './validators';
  * @param rules The array of rules.
  * @returns The schema object.
  */
-const toSchema = (rules: Rule[] = []): Schema => {
+const toSchema = (rules: Rule[] = []): { schema: Schema | null; message?: string } => {
+  if (!Array.isArray(rules)) {
+    return { schema: null, message: m(MESSAGES.schema.invalidRule) };
+  }
   const schema: Schema = {};
-  rules.forEach((rule, index) => {
+  for (let i = 0; i < rules.length; i++) {
+    const rule = rules[i];
     if (!rule.name) {
-      throw new Error(`Rule at index ${index} does not have a name`);
+      return { schema: null, message: m(MESSAGES.schema.missingName, '', i) };
     }
     schema[rule.name] = rule;
-  });
-  return schema;
+  }
+  return { schema };
 };
 
 /**
@@ -26,7 +30,7 @@ const toSchema = (rules: Rule[] = []): Schema => {
  */
 const schemaValidate = (object: any, schema: Schema): ValidationResult => {
   if (typeof object !== 'object' || object === null || Array.isArray(object)) {
-    return { success: false, message: m(MESSAGES.schema.invalidValue) };
+    return { success: false, message: m(MESSAGES.schema.invalidObject) };
   }
   if (typeof schema !== 'object' || schema === null || Array.isArray(schema)) {
     return { success: false, message: m(MESSAGES.schema.invalid) };
@@ -60,9 +64,13 @@ const validate = (value: any, rule: Rule): ValidationResult => {
     return { success: false, message: m(MESSAGES.invalidType, name) };
   }
 
-  const baseCheck = validators.base(value, rule);
-  if (baseCheck && !baseCheck.success) {
-    return baseCheck;
+  const baseResult = validators.base(value, rule);
+  if (baseResult && !baseResult.success) {
+    return baseResult;
+  }
+  // if value is undefined and not required, skip other checks
+  if (value === undefined) {
+    return { success: true, data: value };
   }
 
   const validator = validators[rule.type];

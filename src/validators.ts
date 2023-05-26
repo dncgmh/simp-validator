@@ -1,21 +1,28 @@
 import { MESSAGES, m } from './messages';
 import type { Validator, Rule, ValidationResult } from './interface';
 
-const validateBase = (value: any, rule: Rule): ValidationResult | undefined => {
+const validateBase = (value: any, rule: Rule): ValidationResult => {
   if (rule.required && (value === undefined || value === null)) {
     return { success: false, message: m(MESSAGES.required, rule.name) };
   }
-  if (rule.valid && !rule.valid.includes(value)) {
-    return { success: false, message: m(MESSAGES.valid, rule.name, rule.valid.join(', ')) };
+
+  if (rule.valid) {
+    if (!Array.isArray(rule.valid)) {
+      return { success: false, message: m(MESSAGES.schema.invalidValidType, rule.name, rule.valid) };
+    }
+    if (rule.type === 'array') {
+      return { success: true, data: value };
+    }
+    if (!rule.valid.includes(value)) {
+      return { success: false, message: m(MESSAGES.valid, rule.name, rule.valid.join(', ')) };
+    }
   }
+  return { success: true, data: value };
 };
 
 const validateString: Validator<string> = (value, rule) => {
   if (typeof value !== 'string') {
     return { success: false, message: m(MESSAGES.type, rule.name, 'string') };
-  }
-  if (rule.valid && !rule.valid.includes(value)) {
-    return { success: false, message: m(MESSAGES.valid, rule.name, rule.valid.join(', ')) };
   }
   if (rule.min && value.length < rule.min) {
     return { success: false, message: m(MESSAGES.string.min, rule.name, rule.min) };
@@ -33,14 +40,8 @@ const validateString: Validator<string> = (value, rule) => {
 };
 
 const validateNumber: Validator<number> = (value, rule) => {
-  if (rule.required && value === undefined) {
-    return { success: false, message: m(MESSAGES.required, rule.name) };
-  }
   if (typeof value !== 'number') {
     return { success: false, message: m(MESSAGES.type, rule.name, 'number') };
-  }
-  if (rule.valid && !rule.valid.includes(value)) {
-    return { success: false, message: m(MESSAGES.valid, rule.name, rule.valid.join(', ')) };
   }
   if (rule.integer && !Number.isInteger(value)) {
     return { success: false, message: m(MESSAGES.number.integer, rule.name) };
@@ -84,15 +85,22 @@ const validateArray: Validator<any[]> = (value, rule) => {
   }
   const items = rule.items;
   const arrayErrors = value.map((item) => {
-    const validator = validators[rule.items.type];
+    const baseResult = validateBase(item, items as any);
+    if (!baseResult.success) {
+      return baseResult;
+    }
+    if (!items.type) {
+      return { success: true, data: item };
+    }
+    const validator = validators[items.type];
     if (!validator) {
-      throw new Error(`Unknown item type: ${items.type}`);
+      return { success: false, message: m(MESSAGES.schema.invalidRuleItemsType, rule.name, items.type) };
     }
     return validator(item, items as any);
   });
-  const firstError = arrayErrors.find((error) => !error.success);
+  const firstError = arrayErrors.find((error) => !error?.success);
   if (firstError) {
-    const message = firstError.message ?? 'unknown error';
+    const message = firstError.message;
     return {
       success: false,
       message: m(MESSAGES.array.items, rule.name, message),
@@ -102,14 +110,9 @@ const validateArray: Validator<any[]> = (value, rule) => {
 };
 
 const validateDate: Validator<Date> = (value: any, rule: Rule<Date>) => {
-  if (typeof value === 'string' || typeof value === 'number') {
-    value = new Date(value);
-  }
-  if (!(value instanceof Date)) {
-    return { success: false, message: m(MESSAGES.type, rule.name, 'date') };
-  }
+  value = new Date(value);
   if (Number.isNaN(value.getTime())) {
-    return { success: false, message: 'Invalid date format' };
+    return { success: false, message: m(MESSAGES.type, rule.name, rule.type) };
   }
   if (rule.min && value.getTime() < rule.min) {
     return { success: false, message: m(MESSAGES.date.min, rule.name, rule.min) };

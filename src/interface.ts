@@ -45,7 +45,7 @@ export interface ArrayRule extends RuleBase {
   /** The allowed data type of the value. */
   type: 'array';
   /** The allowed data type of the items in the array. */
-  items: Rule & { type: ItemType };
+  items?: Rule & { type: ItemType };
   /** The minimum length allowed for the array. */
   min?: number;
   /** The maximum length allowed for the array. */

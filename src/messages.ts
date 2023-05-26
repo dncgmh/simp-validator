@@ -1,8 +1,12 @@
 export const MESSAGES = {
   invalidType: '%s has invalid type: %s',
   schema: {
+    invalidRule: 'rule must be an array',
+    invalidRuleItemsType: `type rule of items in %s must be a valid type, got %s`,
     invalid: 'invalid schema object',
-    invalidValue: 'invalid value',
+    invalidObject: 'object must be an object',
+    invalidValidType: 'valid rule of %s must be an array, got %s',
+    missingName: 'missing name in rule at index %s',
   },
   required: '%s is required',
   type: '%s must be a %s',
