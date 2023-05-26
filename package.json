@@ -1,6 +1,6 @@
 {
   "name": "simp-validator",
-  "version": "1.1.3",
+  "version": "1.2.0",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -13,8 +13,12 @@
     "lint:fix": "eslint --ext .ts src --fix",
     "prettier": "prettier --write \"src/**/*.ts\"",
     "prepare": "husky install",
+    "prepublishOnly": "npm test && npm run lint",
     "prepublish": "npm run build",
-    "test": "jest"
+    "test": "jest",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src && git tag v$npm_package_version",
+    "postversion": "git push && git push --tags"
   },
   "keywords": [
     "validator",

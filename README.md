@@ -1,5 +1,11 @@
 # Simp Validator
 
+[![GitHub release](https://img.shields.io/github/release/dncgmh/simp-validator?include_prereleases=&sort=semver&color=blue)](https://github.com/dncgmh/simp-validator/releases/)
+[![License](https://img.shields.io/badge/License-ISC-blue)](https://github.com/dncgmh/simp-validator/blob/main/LICENSE)
+[![issues - simp-validator](https://img.shields.io/github/issues/dncgmh/simp-validator)](https://github.com/dncgmh/simp-validator/issues)
+[![codecov](https://codecov.io/gh/dncgmh/simp-validator/branch/main/graph/badge.svg)](https://codecov.io/gh/dncgmh/simp-validator)
+![npm](https://img.shields.io/npm/dw/simp-validator)
+
 The Simp Validator is a lightweight JavaScript library that provides functions for validating a single value or an entire data object against a schema. It is designed to be simple, flexible, and easily transferable over the network, ensuring smooth JSON serialization. The library can be used in both browser and Node.js environments, making it versatile for various development scenarios.
 
 ## Installation
