@@ -66,7 +66,7 @@ const data = {
 const schema: Schema = {
   name: { type: 'string', required: true },
   age: { type: 'number', min: 18 },
-  email: { type: 'string', pattern: '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$' },
+  email: { type: 'string', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$' },
   hobbies: {
     type: 'array',
     items: { type: 'string', pattern: '^[a-zA-Z]+$' },
@@ -120,8 +120,6 @@ if (schema) {
 ```
 
 This code creates an array of `Rule` objects, calls the `toSchema` function with that array, and then logs the resulting schema object to the console if there were no errors. If there was an error, it logs the error message to the console instead.
-
-GitHub Copilot: Sure, here's a summary of the Simp Validator library:
 
 ## Supported Data Types
 
