@@ -99,14 +99,14 @@ describe('toSchema', () => {
       expect(schema).toEqual({ schema: {} });
     });
 
-    it('should throws an error when a rule does not have a name', () => {
+    it('should returns an error when a rule does not have a name', () => {
       const rules: Rule[] = [{ name: 'rule1', type: 'string' }, { type: 'string' }, { name: 'rule3', type: 'string' }];
       const schema = toSchema(rules);
       expect(schema.schema).toBeNull();
       expect(schema.message).toBeDefined();
     });
 
-    it('toSchema throws an error when rules is not an array', () => {
+    it('toSchema returns an error when rules is not an array', () => {
       const rules = 'not an array';
       const schema = toSchema(rules as any);
       expect(schema.schema).toBeNull();

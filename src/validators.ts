@@ -1,5 +1,6 @@
-import { MESSAGES, m } from './messages';
+import { MESSAGES } from './messages';
 import type { Validator, Rule, ValidationResult } from './interface';
+import { m } from './utils';
 
 const validateBase = (value: any, rule: Rule): ValidationResult => {
   if (rule.required && (value === undefined || value === null)) {

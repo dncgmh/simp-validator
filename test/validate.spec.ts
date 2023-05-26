@@ -67,4 +67,13 @@ describe('validate', () => {
       expect(result.success).toBe(false);
     });
   });
+
+  describe('Custom message', () => {
+    it('should return a custom message when provided', () => {
+      const value = 5678;
+      const rule: Rule = { name: 'test-rule', type: 'string', message: 'Custom message' };
+      const result = validate(value, rule);
+      expect(result.message).toBe(rule.message);
+    });
+  });
 });

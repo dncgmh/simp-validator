@@ -168,6 +168,7 @@ The `Rule` type represents a rule for validating a value. It has the following p
   - For `date`: `min`, `max`
 - `name` (required for schema conversion): The name of the field.
 - `description`: The description of the field.
+- `message`: The custom error message to display if the validation fails.
 
 ### `Schema`
 

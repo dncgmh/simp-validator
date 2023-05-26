@@ -1,26 +1,7 @@
-import { MESSAGES, m } from './messages';
+import { MESSAGES } from './messages';
 import type { Rule, Schema, ValidationResult } from './interface';
 import validators from './validators';
-
-/**
- * convert array of rules to schema object
- * @param rules The array of rules.
- * @returns The schema object.
- */
-const toSchema = (rules: Rule[] = []): { schema: Schema | null; message?: string } => {
-  if (!Array.isArray(rules)) {
-    return { schema: null, message: m(MESSAGES.schema.invalidRule) };
-  }
-  const schema: Schema = {};
-  for (let i = 0; i < rules.length; i++) {
-    const rule = rules[i];
-    if (!rule.name) {
-      return { schema: null, message: m(MESSAGES.schema.missingName, '', i) };
-    }
-    schema[rule.name] = rule;
-  }
-  return { schema };
-};
+import { m, toResult, toSchema } from './utils';
 
 /**
  * Validates a value against a given schema.
@@ -59,14 +40,15 @@ const schemaValidate = (object: any, schema: Schema): ValidationResult => {
  * @returns Returns an object with success status, message and parsed data.
  */
 const validate = (value: any, rule: Rule): ValidationResult => {
+  const message = rule.message;
   const name = rule.name;
   if (!rule.type) {
-    return { success: false, message: m(MESSAGES.invalidType, name) };
+    return toResult({ success: false, message: m(MESSAGES.invalidType, name) }, { customMessage: message });
   }
 
   const baseResult = validators.base(value, rule);
   if (baseResult && !baseResult.success) {
-    return baseResult;
+    return toResult(baseResult, { customMessage: message });
   }
   // if value is undefined and not required, skip other checks
   if (value === undefined) {
@@ -75,10 +57,9 @@ const validate = (value: any, rule: Rule): ValidationResult => {
 
   const validator = validators[rule.type];
   if (!validator) {
-    return { success: false, message: m(MESSAGES.invalidType, rule.name, rule.type) };
+    return toResult({ success: false, message: m(MESSAGES.invalidType, name, rule.type) }, { customMessage: message });
   }
-
-  return validator(value, rule as never);
+  return toResult(validator(value, rule as never), { customMessage: message });
 };
 
 export default {

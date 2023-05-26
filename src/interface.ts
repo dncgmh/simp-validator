@@ -15,6 +15,8 @@ export interface RuleBase {
   required?: boolean;
   /** An array of allowed values. */
   valid?: any[];
+  /** Custom message to return when validation fails. */
+  message?: string;
 }
 
 export interface NumericRule extends RuleBase {
