@@ -17,7 +17,7 @@
     "prepublish": "npm run build",
     "test": "jest",
     "preversion": "npm run lint",
-    "version": "npm run format && git add -A src && git tag v$npm_package_version",
+    "version": "npm run prettier && git add -A src && git tag v$npm_package_version",
     "postversion": "git push && git push --tags"
   },
   "keywords": [
