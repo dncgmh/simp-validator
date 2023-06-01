@@ -1,5 +1,5 @@
 import { MESSAGES } from './messages';
-import type { Rule, Schema, ValidationResult } from './interface';
+import type { Rule, Schema, SchemaValidationResult, ValidationResult } from './interface';
 import validators from './validators';
 import { m, toResult, toSchema } from './utils';
 
@@ -9,7 +9,7 @@ import { m, toResult, toSchema } from './utils';
  * @param  schema The schema to validate against.
  * @returns Returns an object with success status, message and parsed data.
  */
-const schemaValidate = (object: any, schema: Schema): ValidationResult => {
+const schemaValidate = <T>(object: any, schema: Schema): SchemaValidationResult<T> => {
   if (typeof object !== 'object' || object === null || Array.isArray(object)) {
     return { success: false, message: m(MESSAGES.schema.invalidObject) };
   }
@@ -30,7 +30,7 @@ const schemaValidate = (object: any, schema: Schema): ValidationResult => {
   if (Object.keys(errors).length > 0) {
     return { success: false, details: errors };
   }
-  return { success: true, data };
+  return { success: true, data: data as T };
 };
 
 /**

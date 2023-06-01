@@ -91,9 +91,13 @@ export interface ValidationResult<T = any> {
   message?: string;
   /** The validated value if the validation was successful. */
   data?: T;
+}
+
+export interface SchemaValidationResult<T = any> extends ValidationResult<T> {
   /** The details of the validation if the validation failed. */
   details?: Record<string, string>;
 }
+
 /**
  * The main function that validates a value against a rule.
  *
