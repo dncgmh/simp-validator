@@ -2,9 +2,9 @@
 
 [![GitHub release](https://img.shields.io/github/release/dncgmh/simp-validator?include_prereleases=&sort=semver&color=blue)](https://github.com/dncgmh/simp-validator/releases/)
 [![issues - simp-validator](https://img.shields.io/github/issues/dncgmh/simp-validator)](https://github.com/dncgmh/simp-validator/issues)
-![CircleCI](https://img.shields.io/circleci/build/github/dncgmh/simp-validator/main)
+[![CircleCI](https://img.shields.io/circleci/build/github/dncgmh/simp-validator/main)](https://circleci.com/gh/dncgmh/simp-validator)
 [![codecov](https://codecov.io/gh/dncgmh/simp-validator/branch/main/graph/badge.svg)](https://codecov.io/gh/dncgmh/simp-validator)
-![npm](https://img.shields.io/npm/dw/simp-validator)
+[![npm](https://img.shields.io/npm/dw/simp-validator)](https://www.npmjs.com/package/simp-validator)
 [![License](https://img.shields.io/badge/License-ISC-blue)](https://github.com/dncgmh/simp-validator/blob/main/LICENSE)
 
 The Simp Validator is a lightweight JavaScript library for validating data against a schema. It's simple, flexible, and easily transferable over the network. It can be used in both browser and Node.js environments, making it versatile for various development scenarios. Its key feature is the ability to validate data on both the frontend and backend using a single schema, which can be easily migrated or serialized/deserialized without impacting the validation process.
@@ -24,10 +24,10 @@ To use the Simp Validator in your project, follow these steps:
 1. Import the necessary functions and types from the library:
 
 ```typescript
-import { validate, validateSchema, Rule, Schema, toSchema } from 'simp-validator';
+import { validate, schemaValidate, Rule, Schema, toSchema } from 'simp-validator';
 ```
 
-The `validate` function is used to validate a single value against a rule. The `validateSchema` function is used to validate an entire data object against a schema. The `Rule` and `Schema` types are used to define validation rules and schemas, respectively. The `toSchema` function is used to generate a schema from a TypeScript interface.
+The `validate` function is used to validate a single value against a rule. The `schemaValidate` function is used to validate an entire data object against a schema. The `Rule` and `Schema` types are used to define validation rules and schemas, respectively. The `toSchema` function is used to generate a schema from a TypeScript interface.
 
 2. Define your validation rules using the `Rule` type:
 
@@ -53,7 +53,7 @@ const result = validate(value, rule);
 
 The `validate` function takes a value and a rule, and returns a `ValidationResult` object. The `ValidationResult` object contains a `success` property indicating whether the validation was successful, and a `message` property containing an error message if the validation failed.
 
-4. Validate an entire data object against a schema using the `validateSchema` function:
+4. Validate an entire data object against a schema using the `schemaValidate` function:
 
 ```typescript
 const data = {
@@ -75,10 +75,10 @@ const schema: Schema = {
   },
 };
 
-const validationResult = validateSchema(data, schema);
+const validationResult = schemaValidate(data, schema);
 ```
 
-The `validateSchema` function takes a data object and a schema, and returns a `SchemaValidationResult` object. The `SchemaValidationResult` object contains a `success` property indicating whether the validation was successful, a `data` property containing the parsed data if the validation was successful, and a `details` property containing an object with error messages for each field if the validation failed.
+The `schemaValidate` function takes a data object and a schema, and returns a `SchemaValidationResult` object. The `SchemaValidationResult` object contains a `success` property indicating whether the validation was successful, a `data` property containing the parsed data if the validation was successful, and a `details` property containing an object with error messages for each field if the validation failed.
 
 In this example, we're validating an object with several fields. The `name` field is a required string. The `age` field is a number that must be at least 18. The `email` field is a string that must match a specific pattern. The `hobbies` field is an array of strings that must match a specific pattern, must have at least one item, must have no more than five items, and must have unique items
 
@@ -144,9 +144,9 @@ The `validate` function is used to validate a value against a given rule.
 
 Returns a `ValidationResult` object containing the result of the validation.
 
-### `validateSchema(data: any, schema: Schema): SchemaValidationResult`
+### `schemaValidate(data: any, schema: Schema): SchemaValidationResult`
 
-The `validateSchema` function is used to validate an entire data object against a schema.
+The `schemaValidate` function is used to validate an entire data object against a schema.
 
 - `data`: The data object to validate.
 - `schema`: The schema to validate against.
