@@ -5,7 +5,7 @@ describe('validate array', () => {
   describe('Required array', () => {
     it('should return success when required array has items', () => {
       const value = ['apple', 'banana', 'orange'];
-      const rule: Rule = { type: 'array', required: true, items: { type: 'string' } };
+      const rule: Rule = { type: 'array', items: { type: 'string' } };
       const result = validate(value, rule);
       expect(result.success).toBe(true);
       expect(result.data).toBe(value);
@@ -13,7 +13,7 @@ describe('validate array', () => {
 
     it('should return success when required array is empty', () => {
       const value: any[] = [];
-      const rule: Rule = { type: 'array', required: true, items: { type: 'string' } };
+      const rule: Rule = { type: 'array', items: { type: 'string' } };
       const result = validate(value, rule);
       expect(result.success).toBe(true);
     });

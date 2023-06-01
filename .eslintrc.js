@@ -17,5 +17,5 @@ module.exports = {
     'no-prototype-builtins': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
   },
-  ignorePatterns: ['**/lib/**', '**/node_modules/**'],
+  ignorePatterns: ['**/lib/**', '**/node_modules/**', '**/test/**'],
 };

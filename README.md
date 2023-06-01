@@ -34,7 +34,6 @@ The `validate` function is used to validate a single value against a rule. The `
 ```typescript
 const rule: Rule = {
   type: 'string',
-  required: true,
   min: 2,
   max: 10,
   pattern: '^[a-zA-Z]+$',
@@ -64,7 +63,7 @@ const data = {
 };
 
 const schema: Schema = {
-  name: { type: 'string', required: true },
+  name: { type: 'string' },
   age: { type: 'number', min: 18 },
   email: { type: 'string', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$' },
   hobbies: {
@@ -104,10 +103,10 @@ Check the `success` property of the `ValidationResult` or `SchemaValidationResul
 
 ```typescript
 const rules: Rule[] = [
-  { name: 'username', type: 'string', required: true },
-  { name: 'age', type: 'number', required: false },
-  { name: 'email', type: 'string', required: true, pattern: '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$' },
-  { name: 'hobbies', type: 'array', required: true, items: { type: 'string', pattern: '^[a-zA-Z]+$' } },
+  { name: 'username', type: 'string' },
+  { name: 'age', type: 'number', optional: true },
+  { name: 'email', type: 'string', pattern: '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$' },
+  { name: 'hobbies', type: 'array', items: { type: 'string', pattern: '^[a-zA-Z]+$' } },
 ];
 
 const { schema, message } = toSchema(rules);
@@ -158,7 +157,7 @@ Returns a `SchemaValidationResult` object containing the result of the schema va
 The `Rule` type represents a rule for validating a value. It has the following properties:
 
 - `type`: The allowed data type of the value.
-- `required`: A boolean indicating whether the value is required.
+- `optional`: A boolean indicating whether the value is optional. Defaults to `false`.
 - `valid`: An array of valid values.
 - Additional properties depending on the data type:
   - For `string`: `min`, `max`, `pattern`, `len`

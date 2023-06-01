@@ -8,7 +8,6 @@ describe('toSchema', () => {
         {
           name: 'firstName',
           type: 'string',
-          required: true,
           description: 'The first name of the person',
           min: 2,
           max: 20,
@@ -17,7 +16,6 @@ describe('toSchema', () => {
         {
           name: 'lastName',
           type: 'string',
-          required: true,
           description: 'The last name of the person',
           min: 2,
           max: 20,
@@ -26,7 +24,6 @@ describe('toSchema', () => {
         {
           name: 'age',
           type: 'number',
-          required: true,
           description: 'The age of the person',
           min: 18,
           max: 120,
@@ -35,7 +32,6 @@ describe('toSchema', () => {
         {
           name: 'email',
           type: 'string',
-          required: true,
           description: 'The email of the person',
           pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$',
         },
@@ -50,7 +46,6 @@ describe('toSchema', () => {
         firstName: {
           name: 'firstName',
           type: 'string',
-          required: true,
           description: 'The first name of the person',
           min: 2,
           max: 20,
@@ -59,7 +54,6 @@ describe('toSchema', () => {
         lastName: {
           name: 'lastName',
           type: 'string',
-          required: true,
           description: 'The last name of the person',
           min: 2,
           max: 20,
@@ -68,7 +62,6 @@ describe('toSchema', () => {
         age: {
           name: 'age',
           type: 'number',
-          required: true,
           description: 'The age of the person',
           min: 18,
           max: 120,
@@ -77,7 +70,6 @@ describe('toSchema', () => {
         email: {
           name: 'email',
           type: 'string',
-          required: true,
           description: 'The email of the person',
           pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$',
         },
@@ -116,10 +108,10 @@ describe('toSchema', () => {
 });
 
 const schema: Schema = {
-  name: { type: 'string', required: true },
+  name: { type: 'string' },
   age: { type: 'number', integer: true, min: 0, max: 120 },
-  email: { type: 'string', pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$' },
-  hobbies: { type: 'array', items: { type: 'string' } },
+  email: { type: 'string', pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$', optional: true },
+  hobbies: { type: 'array', items: { type: 'string' }, optional: true },
 };
 
 describe('schemaValidate', () => {

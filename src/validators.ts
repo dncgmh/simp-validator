@@ -3,7 +3,7 @@ import type { Validator, Rule, ValidationResult } from './interface';
 import { m } from './utils';
 
 const validateBase = (value: any, rule: Rule): ValidationResult => {
-  if (rule.required && (value === undefined || value === null)) {
+  if (!rule.optional && (value === undefined || value === null)) {
     return { success: false, message: m(MESSAGES.required, rule.name) };
   }
 
@@ -116,10 +116,10 @@ const validateDate: Validator<Date> = (value: any, rule: Rule<Date>) => {
     return { success: false, message: m(MESSAGES.type, rule.name, rule.type) };
   }
   if (rule.min && value.getTime() < rule.min) {
-    return { success: false, message: m(MESSAGES.date.min, rule.name, rule.min) };
+    return { success: false, message: m(MESSAGES.date.min, rule.name, new Date(rule.min).toISOString()) };
   }
   if (rule.max && value.getTime() > rule.max) {
-    return { success: false, message: m(MESSAGES.date.max, rule.name, rule.max) };
+    return { success: false, message: m(MESSAGES.date.max, rule.name, new Date(rule.max).toISOString()) };
   }
   return { success: true, data: value };
 };

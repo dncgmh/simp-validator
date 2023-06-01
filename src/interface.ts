@@ -11,8 +11,8 @@ export interface RuleBase {
   name?: string;
   /** The description of the value. */
   description?: string;
-  /** Whether the value is required. */
-  required?: boolean;
+  /** Whether the value is optional. */
+  optional?: boolean;
   /** An array of allowed values. */
   valid?: any[];
   /** Custom message to return when validation fails. */

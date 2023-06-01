@@ -5,7 +5,7 @@ describe('validate base', () => {
   describe('Required rule', () => {
     it('should return an error when value is undefined and required is true', () => {
       const value = undefined;
-      const rule: Rule = { type: 'string', required: true, name: 'test-rule' };
+      const rule: Rule = { type: 'string', name: 'test-rule' };
       const result = validate(value, rule);
       expect(result.success).toBe(false);
       expect(result.message).toBeDefined();

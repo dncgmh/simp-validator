@@ -22,9 +22,7 @@ const format = (text: string, ...args: any[]): string => {
  */
 export const m = (text: string, fieldName: string = 'value', ...args: any[]): string => {
   if (!fieldName) return format(text, ...args);
-  const a = format(text, fieldName, ...args);
-  console.log(a);
-  return a;
+  return format(text, fieldName, ...args);
 };
 
 /**
@@ -43,7 +41,6 @@ export const toResult = (
   return {
     success: validationResult.success,
     message: customMessage ?? validationResult.message,
-    details: validationResult.details,
     data: validationResult.data,
   };
 };
