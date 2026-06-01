@@ -75,7 +75,7 @@ export interface DateRule extends RuleBase {
   /** The maximum date allowed for the value. */
   max?: number;
   /** An array of allowed date values (as timestamps or Date objects). */
-  valid?: (number | Date)[];
+  valid?: Array<number | Date>;
 }
 
 export interface ObjectRule extends RuleBase {

@@ -1,5 +1,5 @@
 import { MESSAGES } from './messages';
-import type { Validator, Rule, ValidationResult, Schema, SchemaValidationResult, FieldType } from './interface';
+import type { Validator, Rule, ValidationResult, Schema, SchemaValidationResult } from './interface';
 import { m, toResult } from './utils';
 
 const regexCache = new Map<string, RegExp>();
@@ -138,7 +138,7 @@ const validateObject: Validator<object> = (value, rule) => {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     return { success: false, message: m(MESSAGES.type, rule.name, 'object') };
   }
-  const objValue = value as object;
+  const objValue = value;
   if (!rule.schema) {
     return { success: true, data: objValue };
   }
@@ -146,7 +146,7 @@ const validateObject: Validator<object> = (value, rule) => {
   if (!result.success) {
     return {
       success: false,
-      message: result.message || (result.details ? JSON.stringify(result.details) : 'Validation failed'),
+      message: result.message ?? (result.details ? JSON.stringify(result.details) : 'Validation failed'),
       data: result.data as object,
     };
   }
