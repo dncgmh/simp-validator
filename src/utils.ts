@@ -8,8 +8,10 @@ import { MESSAGES } from './messages';
  * @returns The formatted string.
  */
 const format = (text: string, ...args: any[]): string => {
+  let i = 0;
   return text.replace(/%s/g, () => {
-    return args.shift();
+    const val = args[i++];
+    return val === undefined ? '' : String(val);
   });
 };
 
@@ -50,17 +52,17 @@ export const toResult = (
  * @param rules The array of rules.
  * @returns The schema object.
  */
-export const toSchema = (rules: Rule[] = []): { schema: Schema | null; message?: string } => {
+export const toSchema = (rules: Rule[] = []): ValidationResult<Schema> => {
   if (!Array.isArray(rules)) {
-    return { schema: null, message: m(MESSAGES.schema.invalidRule) };
+    return { success: false, message: m(MESSAGES.schema.invalidRule) };
   }
   const schema: Schema = {};
   for (let i = 0; i < rules.length; i++) {
     const rule = rules[i];
     if (!rule.name) {
-      return { schema: null, message: m(MESSAGES.schema.missingName, '', i) };
+      return { success: false, message: m(MESSAGES.schema.missingName, '', i) };
     }
     schema[rule.name] = rule;
   }
-  return { schema };
+  return { success: true, data: schema };
 };

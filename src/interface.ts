@@ -1,5 +1,5 @@
-export type FieldType = 'array' | 'boolean' | 'date' | 'number' | 'string';
-export type ItemType = 'boolean' | 'date' | 'number' | 'string';
+export type FieldType = 'array' | 'boolean' | 'date' | 'number' | 'string' | 'object';
+export type ItemType = 'boolean' | 'date' | 'number' | 'string' | 'object';
 
 /**
  * Represents a rule for validating a value.
@@ -13,8 +13,6 @@ export interface RuleBase {
   description?: string;
   /** Whether the value is optional. */
   optional?: boolean;
-  /** An array of allowed values. */
-  valid?: any[];
   /** Custom message to return when validation fails. */
   message?: string;
 }
@@ -28,6 +26,8 @@ export interface NumericRule extends RuleBase {
   min?: number;
   /** The maximum value allowed for the number. */
   max?: number;
+  /** An array of allowed numeric values. */
+  valid?: number[];
 }
 
 export interface StringRule extends RuleBase {
@@ -41,6 +41,8 @@ export interface StringRule extends RuleBase {
   pattern?: string;
   /** The exact length allowed for the string. */
   len?: number;
+  /** An array of allowed string values. */
+  valid?: string[];
 }
 
 export interface ArrayRule extends RuleBase {
@@ -54,11 +56,15 @@ export interface ArrayRule extends RuleBase {
   max?: number;
   /** The exact length allowed for the array. */
   len?: number;
+  /** An array of allowed values. */
+  valid?: any[];
 }
 
 export interface BooleanRule extends RuleBase {
   /** The allowed data type of the value. */
   type: 'boolean';
+  /** An array of allowed boolean values. */
+  valid?: boolean[];
 }
 
 export interface DateRule extends RuleBase {
@@ -68,6 +74,15 @@ export interface DateRule extends RuleBase {
   min?: number;
   /** The maximum date allowed for the value. */
   max?: number;
+  /** An array of allowed date values (as timestamps or Date objects). */
+  valid?: (number | Date)[];
+}
+
+export interface ObjectRule extends RuleBase {
+  /** The allowed data type of the value. */
+  type: 'object';
+  /** The schema to validate the object against. */
+  schema?: Schema;
 }
 
 export type Rule<T = any> = T extends string
@@ -80,7 +95,9 @@ export type Rule<T = any> = T extends string
   ? DateRule
   : T extends any[]
   ? ArrayRule
-  : StringRule | NumericRule | BooleanRule | DateRule | ArrayRule;
+  : T extends object
+  ? ObjectRule
+  : StringRule | NumericRule | BooleanRule | DateRule | ArrayRule | ObjectRule;
 
 export type Schema = Record<string, Rule>;
 
@@ -105,4 +122,4 @@ export interface SchemaValidationResult<T = any> extends ValidationResult<T> {
  * @param rule The rule to validate against.
  * @returns An object containing the result of the validation.
  */
-export type Validator<T> = (value: any, rule: Rule<T>) => ValidationResult<T>;
+export type Validator<T> = (value: unknown, rule: Rule<T>) => ValidationResult<T>;

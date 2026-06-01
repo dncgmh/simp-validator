@@ -109,12 +109,12 @@ const rules: Rule[] = [
   { name: 'hobbies', type: 'array', items: { type: 'string', pattern: '^[a-zA-Z]+$' } },
 ];
 
-const { schema, message } = toSchema(rules);
+const result = toSchema(rules);
 
-if (schema) {
-  console.log('Schema:', schema);
+if (result.success) {
+  console.log('Schema:', result.data);
 } else {
-  console.error('Error:', message);
+  console.error('Error:', result.message);
 }
 ```
 
@@ -129,12 +129,13 @@ The Simp Validator supports the following data types for validation:
 - Boolean
 - Array
 - Date
+- Object
 
 Each data type has its own set of validation rules that can be customized according to your needs.
 
 ## API
 
-### `validate(value: any, rule: Rule): ValidationResult`
+### `validate(value: unknown, rule: Rule): ValidationResult`
 
 The `validate` function is used to validate a value against a given rule.
 
@@ -143,7 +144,7 @@ The `validate` function is used to validate a value against a given rule.
 
 Returns a `ValidationResult` object containing the result of the validation.
 
-### `schemaValidate(data: any, schema: Schema): SchemaValidationResult`
+### `schemaValidate(data: unknown, schema: Schema): SchemaValidationResult`
 
 The `schemaValidate` function is used to validate an entire data object against a schema.
 
@@ -152,19 +153,27 @@ The `schemaValidate` function is used to validate an entire data object against 
 
 Returns a `SchemaValidationResult` object containing the result of the schema validation.
 
+### `registerValidator(type: string, validator: Validator<any>): void`
+
+Registers a custom validator for a new data type.
+
+- `type`: The name of the data type.
+- `validator`: The validation function.
+
 ### `Rule`
 
 The `Rule` type represents a rule for validating a value. It has the following properties:
 
 - `type`: The allowed data type of the value.
 - `optional`: A boolean indicating whether the value is optional. Defaults to `false`.
-- `valid`: An array of valid values.
+- `valid`: An array of valid values (typed according to the rule type).
 - Additional properties depending on the data type:
   - For `string`: `min`, `max`, `pattern`, `len`
   - For `number`: `integer`, `min`, `max`
   - For `boolean`: No additional properties
   - For `array`: `items`, `min`, `max`, `len`
   - For `date`: `min`, `max`
+  - For `object`: `schema` (nested validation)
 - `name` (required for schema conversion): The name of the field.
 - `description`: The description of the field.
 - `message`: The custom error message to display if the validation fails.
@@ -187,3 +196,23 @@ Validate an entire data object against a schema. Returns a `SchemaValidationResu
 - `success`: A boolean indicating whether the validation was successful.
 - `data`: The parsed data if the validation was successful.
 - `details`: An object containing error messages for each field if the validation failed.
+
+## Development
+
+Run the test suite locally:
+
+```
+npm test
+```
+
+Build the library:
+
+```
+npm run build
+```
+
+Run linting:
+
+```
+npm run lint
+```

@@ -82,27 +82,27 @@ describe('toSchema', () => {
           description: 'The hobbies of the person',
         },
       };
-      const schema = toSchema(rules);
-      expect(schema).toEqual({ schema: expectedSchema });
+      const result = toSchema(rules);
+      expect(result).toEqual({ success: true, data: expectedSchema });
     });
 
     it('should return an empty object if the rules array is empty', () => {
-      const schema = toSchema();
-      expect(schema).toEqual({ schema: {} });
+      const result = toSchema();
+      expect(result).toEqual({ success: true, data: {} });
     });
 
     it('should returns an error when a rule does not have a name', () => {
       const rules: Rule[] = [{ name: 'rule1', type: 'string' }, { type: 'string' }, { name: 'rule3', type: 'string' }];
-      const schema = toSchema(rules);
-      expect(schema.schema).toBeNull();
-      expect(schema.message).toBeDefined();
+      const result = toSchema(rules);
+      expect(result.success).toBe(false);
+      expect(result.message).toBeDefined();
     });
 
     it('toSchema returns an error when rules is not an array', () => {
       const rules = 'not an array';
-      const schema = toSchema(rules as any);
-      expect(schema.schema).toBeNull();
-      expect(schema.message).toBeDefined();
+      const result = toSchema(rules as any);
+      expect(result.success).toBe(false);
+      expect(result.message).toBeDefined();
     });
   });
 });
